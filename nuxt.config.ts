@@ -8,5 +8,12 @@ export default defineNuxtConfig({
   css: [
     '@/assets/css/main.css',
   ],
-  modules: ["@nuxt/ui", "@nuxtjs/tailwindcss", "@pinia/nuxt", "@nuxt/image", "nuxt-icon"],
+  modules: [
+    "@nuxt/ui",
+    "@nuxtjs/tailwindcss",
+    "@pinia/nuxt",
+    "@nuxt/image",
+    "nuxt-icon",
+    "@vite-pwa/nuxt"
+  ],
 })
