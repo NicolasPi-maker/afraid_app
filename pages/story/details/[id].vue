@@ -13,9 +13,16 @@ const state = reactive({
   loading: true,
 })
 
-const { data, pending } = await getStory(params.id);
-state.story = data.value.data;
-state.loading = pending;
+onMounted(async () => {
+  try {
+    const response = await getStory(params.id);
+    state.story = response.data;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    state.loading = false;
+  }
+});
 
 const soundOnly = ref(false);
 const toggleSoundOnly = () => {
@@ -25,7 +32,8 @@ const toggleSoundOnly = () => {
 </script>
 
 <template>
-  <div class="h-full flex flex-col">
+  <p v-if="state.loading">Chargement</p>
+  <div v-else class="h-full flex flex-col">
     <section class="relative thumbnail-wrapper opacity-80" :class="soundOnly ? 'flex flex-col flex-1' : ''">
       <NuxtImg :src="state.story.teasers[0].thumbnails[0].url" :alt="state.story.teasers[0].thumbnails[0].alt" class="w-full h-full object-cover" />
       <div class="header-teaser-wrapper flex flex-col absolute top-0 w-full p-2">

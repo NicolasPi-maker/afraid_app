@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import type {decimal} from "vscode-languageserver-types";
-
 const state = reactive({
   teasers : [],
   loading: true,
@@ -13,6 +11,7 @@ const { data, pending } = await useAsyncData(
 state.teasers = data.value.data;
 state.loading = pending;
 
+const selectedCategoryName = ref('');
 const categories = [
   {id: 1, name: 'Surnaturel'},
   {id: 2, name: 'Paranormal'},
@@ -20,7 +19,12 @@ const categories = [
   {id: 4, name: 'Gore'},
 ];
 
-const getRandomRate = (min: decimal, max: decimal) => {
+const isCategorySelected = (categoryName: string) => {
+  return selectedCategoryName.value === categoryName;
+}
+
+
+const getRandomRate = (min: number, max: number) => {
   let randomNumber = Math.random() * (max - min) + min;
   return randomNumber.toFixed(1);
 }
@@ -33,7 +37,12 @@ const getRandomCategory = () => {
 <template>
   <div v-if="!state.loading">
     <ul class="flex overflow-x-auto gap-3 m-3">
-      <li v-for="category in categories" :key="category.id" class="rounded-full border-2 border-gray-400 p-1 min-w-32 text-center cursor-pointer">
+      <li v-for="category in categories"
+          :key="category.id"
+          @click="selectedCategoryName = category.name"
+          :class="isCategorySelected(category.name) ? 'bg-unactiveBlood text-white active-filter' : ''"
+          class="rounded-full border-2 border-gray-400 p-1 m-2 min-w-32 text-center cursor-pointer"
+      >
         {{ category.name }}
       </li>
     </ul>
@@ -69,5 +78,7 @@ const getRandomCategory = () => {
 </template>
 
 <style scoped>
-
+.active-filter {
+  box-shadow: 0 0 50px 5px #3D0000;
+}
 </style>

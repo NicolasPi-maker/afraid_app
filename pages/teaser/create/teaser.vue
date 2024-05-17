@@ -92,7 +92,7 @@ const confirmTeaser = async () => {
       </div>
     </section>
     <section class="flex justify-center items-center gap-6 m-6 mb-12">
-      <NuxtLink :to="{name : 'story-create'}" class="w-1/2">
+      <NuxtLink :to="{name : 'teaser-create'}" class="w-1/2">
         <AppButton label="Retour" outlined class="w-full"/>
       </NuxtLink>
       <AppButton label="Valider le résumé" @click="confirmTeaser" class="w-1/2"/>

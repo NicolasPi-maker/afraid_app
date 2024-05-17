@@ -46,7 +46,7 @@ const canGeneratePrompt = computed(() => prompt.value !== '' && !onLoading.value
       </span>
     </div>
     <div class="flex flex-col items-center justify-center m-6 gap-2">
-      <NuxtLink :to="{name : 'story-create-teaser'}"  class="w-2/3">
+      <NuxtLink :to="{name : 'teaser-create-teaser'}"  class="w-2/3">
         <AppButton label="Lancer l'incantation" class="w-full" :disabled="!canGeneratePrompt" :class="canGeneratePrompt ? '' : 'bg-gray-700'" />
       </NuxtLink>
       <small class="text-gray-500 text-sm px-2 underline">
