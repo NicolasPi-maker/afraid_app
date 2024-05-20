@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppButton from "~/components/shared/AppButton.vue";
 import "/node_modules/flag-icons/css/flag-icons.min.css";
+
 definePageMeta({
   layout: false,
 })
@@ -25,7 +26,6 @@ const isOpen = ref(true);
 
 <template>
   <main class="home-app-wrapper flex items-center flex-col relative">
-    <NuxtImg src="background_app.jpg" class="h-full w-full background-app absolute" />
     <NuxtImg src="branding/logo_blanc.svg" alt="Logo" class="flex-1 m-3" width="250" height="250" />
     <section class="flex flex-col items-center justify-center w-full">
       <div class="flex gap-2 m-3">
@@ -62,6 +62,8 @@ const isOpen = ref(true);
 
 .home-app-wrapper {
   height: 100vh;
+  background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.5)), url("/background_app.jpg");
+
 }
 
 .background-app {

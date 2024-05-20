@@ -4,12 +4,14 @@ import IconShare from "~/components/icons/IconShare.vue";
 import IconRegister from "~/components/icons/IconRegister.vue";
 import AppButton from "~/components/shared/AppButton.vue";
 import {useSpeech} from "~/composables/useSpeech";
+import IconCheck from "~/components/icons/IconCheck.vue";
 
 const router = useRouter();
 const prompt = useState('prompt', () => {
   return '';
 });
 
+const newStoryId = ref(0);
 const state = reactive({
   teaser : {
     title: '',
@@ -30,6 +32,14 @@ const state = reactive({
 });
 
 const isLoading = ref(false);
+const isOpen = ref(false);
+const storyGenerationLaunched = ref(false);
+
+const launchStoryGeneration = () => {
+  isLoading.value = true;
+  isOpen.value = true;
+  storyGenerationLaunched.value = true;
+}
 
 const { generateTeaser, saveTeaser } = useTeaser();
 const { generateStory, storeChapters} = useStory();
@@ -38,6 +48,11 @@ const { saveSpeech } = useSpeech();
 const { data, pending, error, refresh } = await generateTeaser(prompt.value);
 state.teaser = data.value.teaser;
 
+const storyGenerationCheckPoint = ref({
+  storyGeneration : false,
+  chaptersGeneration : false,
+  speechGeneration : false,
+});
 const confirmTeaser = async () => {
   const data = {
     prompt: prompt.value,
@@ -45,23 +60,37 @@ const confirmTeaser = async () => {
     speaker: state.speaker,
     language: state.language,
   };
-  isLoading.value = true;
-  try {
-    const response = await generateStory(data);
-    if(response.success) {
-      // prompt.value = '';
-      // await router.push({name: 'story-id', params: {id: response.data}});
-      const { prompt_id, teaser, story_id, generated_story } = response.data;
-      await saveTeaser({prompt_id, story_id, teaser});
-      await storeChapters(generated_story, story_id);
-      await saveSpeech({story_id, speaker: data.speaker, language: data.language});
+  if(!isLoading.value) {
+    try {
+      launchStoryGeneration();
+      const response = await generateStory(data);
+      if(response.success) {
+        storyGenerationCheckPoint.value.storyGeneration = true;
+        const { prompt_id, teaser, story_id, generated_story } = response.data;
+        newStoryId.value = story_id;
+        saveTeaser({prompt_id, story_id, teaser});
+        const {data: chapterResponse } = await storeChapters(generated_story, story_id);
+        if(chapterResponse.value.success) {
+          storyGenerationCheckPoint.value.chaptersGeneration = true;
+        }
+
+        const {data: speechResponse} = await saveSpeech({story_id, speaker: data.speaker, language: data.language});
+        if(speechResponse.value.success) {
+          storyGenerationCheckPoint.value.speechGeneration = true;
+        }
+
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      isLoading.value = false;
     }
-  } catch (error) {
-    console.error(error);
-  } finally {
-    isLoading.value = false;
   }
 }
+
+const storyIsReady = computed(() => {
+  return storyGenerationCheckPoint.value.storyGeneration && storyGenerationCheckPoint.value.chaptersGeneration && storyGenerationCheckPoint.value.speechGeneration;
+});
 </script>
 
 <template>
@@ -95,8 +124,49 @@ const confirmTeaser = async () => {
       <NuxtLink :to="{name : 'teaser-create'}" class="w-1/2">
         <AppButton label="Retour" outlined class="w-full"/>
       </NuxtLink>
-      <AppButton label="Valider le résumé" @click="confirmTeaser" class="w-1/2"/>
+      <AppButton v-if="!storyGenerationLaunched" :loading="isLoading" label="Valider le résumé" @click="confirmTeaser" class="w-1/2"/>
     </section>
+    <UModal v-model="isOpen" prevent-close :ui="{container: 'items-center'}">
+      <div class="p-6 flex flex-col items-center justify-center gap-6">
+        <h2 v-if="!storyIsReady" class="text-lg font-marina text-center">Votre histoire est en cours de génération, veuillez patienter...</h2>
+        <h2 v-else class="text-lg font-marina text-center">Votre histoire est terminée, bonne chance...</h2>
+        <ol class="w-full flex flex-col gap-3">
+          <li>
+            <div v-if="!storyGenerationCheckPoint.storyGeneration" class="flex gap-3">
+              <p class="flex-1 text-base font-respira">L'écriture est en cours</p>
+              <Icon name="line-md:loading-loop" />
+            </div>
+            <div v-else class="flex gap-3">
+              <p class="flex-1 text-base font-respira">Ecriture terminée</p>
+              <IconCheck width="30" height="30" />
+            </div>
+          </li>
+          <li>
+            <div v-if="!storyGenerationCheckPoint.chaptersGeneration" class="flex gap-3">
+              <p class="flex-1 text-base font-respira">Illustration des chapitres en cours</p>
+              <Icon name="line-md:loading-loop" />
+            </div>
+            <div v-else class="flex gap-3">
+              <p class="flex-1 text-base font-respira">Illustration de l'histoire terminée</p>
+              <IconCheck width="30" height="30" />
+            </div>
+          </li>
+          <li>
+            <div v-if="!storyGenerationCheckPoint.speechGeneration" class="flex gap-3">
+              <p class="flex-1 text-base font-respira">Génération de la voix en cours</p>
+              <Icon name="line-md:loading-loop" />
+            </div>
+            <div v-else class="flex gap-3">
+              <p class="flex-1 text-base font-respira">Génération de la voix terminée</p>
+              <IconCheck width="30" height="30" />
+            </div>
+          </li>
+        </ol>
+        <NuxtLink v-if="storyIsReady" :to="{name: 'story-id', params: {id: newStoryId}}" class="w-2/3">
+          <AppButton label="Lire mon histoire" class="mt-6 w-full"/>
+        </NuxtLink>
+      </div>
+    </UModal>
   </div>
 </template>
 

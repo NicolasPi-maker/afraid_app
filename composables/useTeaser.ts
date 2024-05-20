@@ -16,7 +16,7 @@ export const useTeaser = () => {
         });
     }
 
-    const saveTeaser = async (data : any) => {
+    const saveTeaser = (data : any) => {
         return useFetch(`${appApiUrl}/teaser`, {
             method: 'POST',
             body: {prompt_id: data.prompt_id, story_id: data.story_id, teaser: data.teaser}
