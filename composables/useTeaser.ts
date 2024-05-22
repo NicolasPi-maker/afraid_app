@@ -9,10 +9,10 @@ export const useTeaser = () => {
         return $fetch(`${appApiUrl}/teaser/${id}`);
     }
 
-    const generateTeaser = async (prompt : string) => {
-        return useFetch(`${appApiUrl}/teaser/generate`, {
+    const generateTeaser = async (prompt : string, language: string = 'FR') => {
+        return $fetch(`${appApiUrl}/teaser/generate`, {
             method: 'POST',
-            body: {prompt}
+            body: {prompt, language}
         });
     }
 

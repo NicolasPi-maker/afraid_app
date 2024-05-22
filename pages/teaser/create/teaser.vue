@@ -32,6 +32,7 @@ const state = reactive({
 });
 
 const isLoading = ref(false);
+const teaserOnLoading = ref(false);
 const isOpen = ref(false);
 const storyGenerationLaunched = ref(false);
 
@@ -45,8 +46,20 @@ const { generateTeaser, saveTeaser } = useTeaser();
 const { generateStory, storeChapters} = useStory();
 const { saveSpeech } = useSpeech();
 
-const { data, pending, error, refresh } = await generateTeaser(prompt.value);
-state.teaser = data.value.teaser;
+onMounted(async () => {
+  teaserOnLoading.value = true;
+  if(prompt.value === '') {
+    await router.push({name: 'teaser-create'});
+  }
+  try {
+    const response = await generateTeaser(prompt.value, state.language.code);
+    state.teaser = response.teaser;
+  } catch (error) {
+    console.error(error);
+  } finally {
+    teaserOnLoading.value = false;
+  }
+});
 
 const storyGenerationCheckPoint = ref({
   storyGeneration : false,
@@ -94,7 +107,7 @@ const storyIsReady = computed(() => {
 </script>
 
 <template>
-  <div class="h-full flex flex-col">
+  <div class="h-full flex flex-col" v-if="!teaserOnLoading">
     <section class="relative thumbnail-wrapper opacity-80">
       <NuxtImg :src="state.teaser.illustration.url" :alt="state.teaser.illustration.description" class="w-full" />
       <div class="header-teaser-wrapper flex flex-col absolute top-0 w-full p-2">
@@ -167,6 +180,10 @@ const storyIsReady = computed(() => {
         </NuxtLink>
       </div>
     </UModal>
+  </div>
+  <div v-else class="flex flex-col items-center justify-center h-full">
+    <Icon name="line-md:loading-loop" size="5em" />
+    <p class="font-marina text-lg">Génération de votre résumé en cours...</p>
   </div>
 </template>
 
