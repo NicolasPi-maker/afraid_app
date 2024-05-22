@@ -7,7 +7,7 @@ const props = defineProps({
   outlined: Boolean,
   iconPath: {
     type: String,
-    default: '',
+    default: null,
     required: false,
   },
   loading: {
