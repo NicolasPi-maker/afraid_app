@@ -22,7 +22,7 @@ import AppButton from "~/components/shared/AppButton.vue";
         route-name="teaser-create"
     />
     <div class="flex justify-center w-full">
-      <AppButton label="Voir l'histoire" icon="icons/Play.svg" class="w-full m-3"/>
+      <AppButton label="Voir l'histoire" icon="icons/Créer.svg" class="w-full m-3"/>
     </div>
   </div>
 </template>
