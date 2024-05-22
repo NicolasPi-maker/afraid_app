@@ -76,7 +76,7 @@ const storyLanguage = ref('FR');
     <section class="mx-3 p-2 flex flex-col flex-1">
       <p class="text-gray-500 font-respira flex flex-1">{{ state.story.teasers[0].content }}</p>
       <div class="flex justify-center w-full">
-        <AppButton label="Voir l'histoire" icon="Play" class="w-full m-3" @click="router.push({name: 'story-details-id', params: {id: state.story.id}})" />
+        <AppButton label="Voir l'histoire" icon="icons/play.svg" class="w-full m-3" @click="router.push({name: 'story-details-id', params: {id: state.story.id}})" />
       </div>
     </section>
   </div>
