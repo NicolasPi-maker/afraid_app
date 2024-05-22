@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import FeatureCard from "~/components/nav/FeatureCard.vue";
+import AppButton from "~/components/shared/AppButton.vue";
 </script>
 
 <template>
@@ -20,6 +21,9 @@ import FeatureCard from "~/components/nav/FeatureCard.vue";
         subtitle="Accessible uniquement aux utilisateurs connectés."
         route-name="teaser-create"
     />
+    <div class="flex justify-center w-full">
+      <AppButton label="Voir l'histoire" icon="Play" class="w-full m-3"/>
+    </div>
   </div>
 </template>
 
