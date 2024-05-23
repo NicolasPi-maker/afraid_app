@@ -23,7 +23,8 @@ const state = reactive({
   },
   speaker : {
     id: 46,
-    api_id: 'OVVPnTGPGhk7vn3RUB1h'
+    // api_id: 'OVVPnTGPGhk7vn3RUB1h'
+    api_id: 'N2lVS1w4EtoT3dr4eOWO'
   },
   language: {
     id: 74,
