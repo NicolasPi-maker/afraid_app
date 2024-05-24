@@ -15,7 +15,7 @@ import AppButton from "~/components/shared/AppButton.vue";
     />
     <FeatureCard
         title="CRÉER DES HISTOIRES"
-        description="Générés gratuitement jusqu’à 5 histoires par jours grâce à l’intelligence artificiel et à votre imagination !"
+        description="Générez gratuitement jusqu’à 5 histoires par jours grâce à l’Intelligence Artificiel et à votre imagination !"
         icon-path="icons/Créer.svg"
         image-path="thumbnails/create_story.jpg"
         subtitle="Accessible uniquement aux utilisateurs connectés."
