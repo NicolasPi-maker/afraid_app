@@ -40,10 +40,24 @@ watch(() => props.modelValue, (newValue) => {
 
 <template>
   <div class="rounded-xl flex justify-between items-center relative">
-    <input @input="handleInput" type="password" id="password" name="password" placeholder="Mot de passe" class="p-3 border rounded-lg text-sm w-full bg-black text-gray-500" autocomplete="true" />
-    <button type="button" @click.stop="togglePasswordVisibility">
-      <NuxtImg v-if="passwordVisibility" src="icons/Voir.svg" alt="random prompt" height="20" width="20" />
-      <svg v-else xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 21 21">
+    <label for="password" class="sr-only">Mot de passe</label>
+    <input
+        @input="handleInput"
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Mot de passe"
+        class="p-3 border rounded-lg text-sm w-full bg-black text-gray-500"
+        autocomplete="true"
+    />
+    <button
+        type="button"
+        @click.stop="togglePasswordVisibility"
+        aria-label="toggle password visibility"
+        aria-pressed="false"
+    >
+      <NuxtImg v-if="passwordVisibility" src="icons/Voir.svg" alt="open eye icon, show the password" height="20" width="20" />
+      <svg v-else xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 21 21" aria-hidden="true">
         <rect width="21" height="21" fill="none" />
         <path fill="none" stroke="white" stroke-linecap="round" stroke-linejoin="round" d="M2 10.5c2.537 3.667 5.37 5.5 8.5 5.5s5.963-1.833 8.5-5.5M4.5 13.423l-2 2.077m14-2.077l2 2.077m-6 .5l1 2.5m-5-2.5l-1 2.5" />
       </svg>

@@ -64,12 +64,12 @@ const toggleSoundOnly = () => {
     </section>
     <section v-if="!soundOnly" class="flex flex-col flex-1 m-5 p-2">
       <div v-for="chapter in state.story.chapters" :key="chapter.id">
-        <h2 class="text-xl font-marina my-3">{{ chapter.title }}</h2>
+        <h2 class="text-xl font-marina my-6">{{ chapter.title }}</h2>
         <div class="imageContainer relative">
-          <NuxtImg v-if="chapter.illustration.length > 0" :src="chapter.illustration[0].url" :alt="chapter.illustration.alt" class="w-full h-48 object-cover rounded-lg my-3 foregroundImg" />
-          <NuxtImg v-if="chapter.illustration.length > 0" :src="chapter.illustration[0].url" :alt="chapter.illustration.alt" class="w-full h-48 object-cover rounded-lg my-3 backgroundImg" />
+          <NuxtImg v-if="chapter.illustration.length > 0" :src="chapter.illustration[0].url" :alt="chapter.illustration.alt" class="w-full h-48 object-cover rounded-lg my-6 foregroundImg" />
+          <NuxtImg v-if="chapter.illustration.length > 0" :src="chapter.illustration[0].url" :alt="chapter.illustration.alt" class="w-full h-48 object-cover rounded-lg my-6 backgroundImg" />
         </div>
-        <ul class="flex flex-col gap-4">
+        <ul class="flex flex-col gap-4 relative z-10">
           <li v-for="paragraph in chapter.paragraphs" :key="paragraph.id">
             <p class="font-respira">{{ paragraph.content }}</p>
           </li>
@@ -96,7 +96,7 @@ const toggleSoundOnly = () => {
   transform: scale(1.05);
   transition: all 0.5s ease;
   z-index: 1;
-  opacity: 1;
+  opacity: 0.8;
   filter: blur(24px);
 }
 </style>

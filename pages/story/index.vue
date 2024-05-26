@@ -51,7 +51,14 @@ const getRandomCategory = () => {
         <NuxtLink :to="{name: 'story-id', params: {id: teaser.story_id}}">
           <h2 class="text-2xl font-marina my-3">{{ (teaser.title).toUpperCase() }}</h2>
           <div class="flex w-full">
-            <NuxtImg v-if="teaser.thumbnails.length > 0" :src="teaser.thumbnails[0].url" :alt="teaser.thumbnails[0].alt" class="object-cover rounded-lg" width="150px" height="150px" />
+            <NuxtImg
+                v-if="teaser.thumbnails.length > 0"
+                :src="teaser.thumbnails[0].url"
+                :alt="teaser.thumbnails[0].alt"
+                class="object-cover rounded-lg"
+                width="150px"
+                height="150px"
+            />
             <section class="mx-3 flex flex-col w-full">
               <div class="flex items-center">
                 <div class="flex items-center gap-2 flex-1">
