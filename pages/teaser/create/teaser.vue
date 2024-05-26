@@ -5,6 +5,7 @@ import IconRegister from "~/components/icons/IconRegister.vue";
 import AppButton from "~/components/shared/AppButton.vue";
 import {useSpeech} from "~/composables/useSpeech";
 import IconCheck from "~/components/icons/IconCheck.vue";
+import IconCross from "~/components/icons/IconCross.vue";
 
 const router = useRouter();
 const prompt = useState('prompt', () => {
@@ -62,10 +63,14 @@ onMounted(async () => {
   }
 });
 
-const storyGenerationCheckPoint = ref({
-  storyGeneration : false,
-  chaptersGeneration : false,
-  speechGeneration : false,
+const storyGenerationCheckPoint = ref<{
+  storyGeneration: boolean | undefined,
+  chaptersGeneration: boolean | undefined,
+  speechGeneration: boolean | undefined,
+}>({
+  storyGeneration : undefined,
+  chaptersGeneration : undefined,
+  speechGeneration : undefined,
 });
 const confirmTeaser = async () => {
   const data = {
@@ -82,17 +87,17 @@ const confirmTeaser = async () => {
         storyGenerationCheckPoint.value.storyGeneration = true;
         const { prompt_id, teaser, story_id, generated_story } = response.data;
         newStoryId.value = story_id;
+
         saveTeaser({prompt_id, story_id, teaser});
+
         const {data: chapterResponse } = await storeChapters(generated_story, story_id);
-        if(chapterResponse.value.success) {
-          storyGenerationCheckPoint.value.chaptersGeneration = true;
-        }
+        storyGenerationCheckPoint.value.chaptersGeneration = !!chapterResponse.value.success;
 
         const {data: speechResponse} = await saveSpeech({story_id, speaker: data.speaker, language: data.language});
-        if(speechResponse.value.success) {
-          storyGenerationCheckPoint.value.speechGeneration = true;
-        }
+        storyGenerationCheckPoint.value.speechGeneration = !!speechResponse.value.success;
 
+      } else {
+        setStoryIsFailed();
       }
     } catch (error) {
       console.error(error);
@@ -105,6 +110,12 @@ const confirmTeaser = async () => {
 const storyIsReady = computed(() => {
   return storyGenerationCheckPoint.value.storyGeneration && storyGenerationCheckPoint.value.chaptersGeneration && storyGenerationCheckPoint.value.speechGeneration;
 });
+
+const setStoryIsFailed = () => {
+  storyGenerationCheckPoint.value.storyGeneration = false;
+  storyGenerationCheckPoint.value.chaptersGeneration = false;
+  storyGenerationCheckPoint.value.speechGeneration = false;
+}
 </script>
 
 <template>
@@ -146,9 +157,13 @@ const storyIsReady = computed(() => {
         <h2 v-else class="text-lg font-marina text-center">Votre histoire est terminée, bonne chance...</h2>
         <ol class="w-full flex flex-col gap-3">
           <li>
-            <div v-if="!storyGenerationCheckPoint.storyGeneration" class="flex gap-3">
+            <div v-if="storyGenerationCheckPoint.storyGeneration === undefined" class="flex gap-3">
               <p class="flex-1 text-base font-respira">L'écriture est en cours</p>
               <Icon name="line-md:loading-loop" />
+            </div>
+            <div v-else-if="!storyGenerationCheckPoint.storyGeneration" class="flex gap-3">
+              <p class="flex-1 text-base font-respira text-blood">Echec de l'écriture</p>
+              <IconCross width="30" height="30" fill="#ff0000" />
             </div>
             <div v-else class="flex gap-3">
               <p class="flex-1 text-base font-respira">Ecriture terminée</p>
@@ -156,9 +171,13 @@ const storyIsReady = computed(() => {
             </div>
           </li>
           <li>
-            <div v-if="!storyGenerationCheckPoint.chaptersGeneration" class="flex gap-3">
+            <div v-if="storyGenerationCheckPoint.chaptersGeneration === undefined" class="flex gap-3">
               <p class="flex-1 text-base font-respira">Illustration des chapitres en cours</p>
               <Icon name="line-md:loading-loop" />
+            </div>
+            <div v-else-if="!storyGenerationCheckPoint.chaptersGeneration" class="flex gap-3">
+              <p class="flex-1 text-base font-respira text-blood">Echec de l'illustration des chapitres</p>
+              <IconCross width="30" height="30" fill="#ff0000" />
             </div>
             <div v-else class="flex gap-3">
               <p class="flex-1 text-base font-respira">Illustration de l'histoire terminée</p>
@@ -166,9 +185,13 @@ const storyIsReady = computed(() => {
             </div>
           </li>
           <li>
-            <div v-if="!storyGenerationCheckPoint.speechGeneration" class="flex gap-3">
+            <div v-if="storyGenerationCheckPoint.speechGeneration === undefined" class="flex gap-3">
               <p class="flex-1 text-base font-respira">Génération de la voix en cours</p>
               <Icon name="line-md:loading-loop" />
+            </div>
+            <div v-else-if="!storyGenerationCheckPoint.speechGeneration" class="flex gap-3">
+              <p class="flex-1 text-base font-respira text-blood">Echec de la génération de la voix</p>
+              <IconCross width="30" height="30" fill="#ff0000" />
             </div>
             <div v-else class="flex gap-3">
               <p class="flex-1 text-base font-respira">Génération de la voix terminée</p>
