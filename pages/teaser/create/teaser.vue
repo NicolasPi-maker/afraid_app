@@ -111,11 +111,11 @@ const storyIsReady = computed(() => {
   <div class="h-full flex flex-col" v-if="!teaserOnLoading">
     <section class="relative thumbnail-wrapper opacity-80">
       <NuxtImg :src="state.teaser.illustration.url" :alt="state.teaser.illustration.description" class="w-full" />
-      <div class="header-teaser-wrapper flex flex-col absolute top-0 w-full p-2">
+      <div class="header-teaser-wrapper glass flex flex-col p-3 absolute top-0 w-full">
         <button @click="router.back()">
-          <IconArrowLeft class="flex-1 mt-2 mx-5"/>
+          <IconArrowLeft class="flex-1 mx-3" height="50" width="50"/>
         </button>
-        <div class="flex justify-between items-center mt-2 mx-3">
+        <div class="flex justify-between items-center py-1 px-3">
           <h1 class="font-marina text-xl w-1/2">{{ (state.teaser.title).toUpperCase() }}</h1>
           <ul class="flex gap-4">
             <li>

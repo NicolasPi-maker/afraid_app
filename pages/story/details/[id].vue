@@ -36,7 +36,7 @@ const toggleSoundOnly = () => {
   <div v-else class="h-full flex flex-col">
     <section class="relative thumbnail-wrapper opacity-80" :class="soundOnly ? 'flex flex-col flex-1' : ''">
       <NuxtImg :src="state.story.teasers[0].thumbnails[0].url" :alt="state.story.teasers[0].thumbnails[0].alt" class="w-full h-full object-cover" />
-      <div class="header-teaser-wrapper flex flex-col absolute top-0 w-full p-2">
+      <div class="header-teaser-wrapper glass flex flex-col absolute top-0 w-full p-2">
         <button @click="router.back()">
           <IconArrowLeft class="flex-1 mt-2 mx-5"/>
         </button>
@@ -65,7 +65,10 @@ const toggleSoundOnly = () => {
     <section v-if="!soundOnly" class="flex flex-col flex-1 m-5 p-2">
       <div v-for="chapter in state.story.chapters" :key="chapter.id">
         <h2 class="text-xl font-marina my-3">{{ chapter.title }}</h2>
-        <NuxtImg v-if="chapter.illustration.length > 0" :src="chapter.illustration[0].url" :alt="chapter.illustration.alt" class="w-full h-48 object-cover rounded-lg my-3" />
+        <div class="imageContainer relative">
+          <NuxtImg v-if="chapter.illustration.length > 0" :src="chapter.illustration[0].url" :alt="chapter.illustration.alt" class="w-full h-48 object-cover rounded-lg my-3 foregroundImg" />
+          <NuxtImg v-if="chapter.illustration.length > 0" :src="chapter.illustration[0].url" :alt="chapter.illustration.alt" class="w-full h-48 object-cover rounded-lg my-3 backgroundImg" />
+        </div>
         <ul class="flex flex-col gap-4">
           <li v-for="paragraph in chapter.paragraphs" :key="paragraph.id">
             <p class="font-respira">{{ paragraph.content }}</p>
@@ -79,5 +82,21 @@ const toggleSoundOnly = () => {
 <style scoped>
 .thumbnail-wrapper {
   transition: all 0.3s;
+}
+
+.foregroundImg {
+  position: relative;
+  z-index: 2;
+}
+
+.backgroundImg {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  transform: scale(1.05);
+  transition: all 0.5s ease;
+  z-index: 1;
+  opacity: 1;
+  filter: blur(24px);
 }
 </style>
