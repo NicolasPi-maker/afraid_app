@@ -7,7 +7,6 @@ import BottomAppBar from "~/components/nav/BottomAppBar.vue";
   <div>
     <AppBar />
     <main class="overflow-y-auto relative bg-black">
-<!--      <NuxtImg src="background_app.jpg" class="h-full w-full background-app absolute" />-->
       <slot />
     </main>
     <BottomAppBar />

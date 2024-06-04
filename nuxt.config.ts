@@ -14,7 +14,8 @@ export default defineNuxtConfig({
     "@pinia/nuxt",
     "@nuxt/image",
     "nuxt-icon",
-    "@vite-pwa/nuxt"
+    "@vite-pwa/nuxt",
+    "@nuxt/test-utils/module",
   ],
   pwa: {
     manifest: {

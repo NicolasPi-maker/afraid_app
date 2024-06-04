@@ -8,6 +8,10 @@ export const useStory = () => {
         });
     }
 
+    const generateStoryContinuation = (storyId: string) => {
+        return $fetch(`${appApiUrl}/story/continuation/${storyId}`);
+    }
+
     const getStory = async (id: string) => {
         return $fetch(`${appApiUrl}/story/${id}`);
     }
@@ -22,6 +26,7 @@ export const useStory = () => {
     return {
         generateStory,
         getStory,
-        storeChapters
+        storeChapters,
+        generateStoryContinuation
     }
 }
